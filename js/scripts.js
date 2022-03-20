@@ -39,9 +39,27 @@ let countryRepository = (function () {
         return countryList;
     }
 
+    // Replace document.write with functions like createElement() and appendChild()
+    function addListItem(country) {
+        let countryList = document.querySelector('.country-list');
+        let listCountry = document.createElement('li');
+        let button = document.createElement('button');
+        button.innerText = country.name;
+        button.classList.add('.button-class');
+        listCountry.appendChild(button);
+        countryList.appendChild(listCountry);
+        button.addEventListener ('click')
+    }
+
+    function showDetails (country) {
+        console.log (country.name);
+    }
+
     return {
         add: add,
-        getAll: getAll
+        getAll: getAll,
+        addListItem: addListItem,
+        showDetails: showDetails
     };
 })();
 
@@ -70,7 +88,7 @@ repository.forEach ( country => {
 }}); */
 
 countryRepository.getAll().forEach(function(country) {
-    /* countryRepository.addListItem(country); */
+    countryRepository.addListItem(country);
 });
 
 
