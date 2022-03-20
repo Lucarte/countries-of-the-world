@@ -48,11 +48,13 @@ let countryRepository = (function () {
         button.classList.add('.button-class');
         listCountry.appendChild(button);
         countryList.appendChild(listCountry);
-        button.addEventListener ('click')
+        button.addEventListener ('click', function () {
+            console.log (country);
+        });
     }
 
     function showDetails (country) {
-        console.log (country.name);
+        console.log(country);
     }
 
     return {
