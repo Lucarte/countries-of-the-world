@@ -22,7 +22,7 @@ Pastel yellow: rgba(255,204,92);
     text-transform: capitalize;
   }
   
-  .pokemon-list {
+  .country-list {
     list-style: none;
     margin-top: 170px;
   }
@@ -43,7 +43,7 @@ Pastel yellow: rgba(255,204,92);
     transition-duration: 0.4s;
   }
   
-  .pokemon-img {
+  .country-img {
     height: 200px;
     width: 200px;
     margin-top: 20px;
