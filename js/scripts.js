@@ -1,25 +1,7 @@
-// pack the forEach function into an IIFE
+// Pack the forEach function into an IIFE
 let countryRepository = (function () {
-    let countryList = [
-        {
-            name: 'Colombia',
-            capital: 'Bogota',
-            population: 80000000,
-            borders: ['BRA', 'ECU', 'PAN', 'PER', 'VEN']
-        },
-        {
-            name: 'USA',
-            capital: 'Washington D.C.',
-            population: 330000000,
-            borders: ['CAN', 'MEX']
-        },
-        {
-            name: 'Germany',
-            capital: 'Berlin',
-            population: 11000,
-            borders: ['AUT', 'BEL', 'CZE', 'DNK', 'FRA', 'LUX', 'NLD', 'POL', 'CHE']
-        }
-    ];
+    let countryList = [];
+    let apiURL = 'https://restcountries.com/v3.1/all'
 
     function add (country) {
         if (
@@ -43,55 +25,135 @@ let countryRepository = (function () {
     function addListItem(country) {
         let countryList = document.querySelector('.country-list');
         let listCountry = document.createElement('li');
+        listCountry.classList.add('group-list-item', 'col-lg-4', 'col-md-6');
+
         let button = document.createElement('button');
-        button.innerText = country.name;
-        button.classList.add('.button-class');
+        button.innerText = country.name.common;
+        button.classList.add('btn', 'btn-warning', 'btn-block');
+        
+        //link buttons to modal container
+        button.setAttribute('data-target', '#modal-contrainer');
+        button.setAttribute('data-toggle', 'modal');    
+
         listCountry.appendChild(button);
         countryList.appendChild(listCountry);
         button.addEventListener ('click', function () {
-            console.log (country);
+            showDetails(country);
         });
     }
 
-    function showDetails (country) {
-        console.log(country);
+    // Add loadList function to fetch data from API
+    function loadList() {
+        return fetch(apiURL).then(function (response) {
+            return response.json();
+        }).then(function (json) {
+            json.forEach(function (item) {
+                let country = {
+                    name: item.name,
+                    capital: item.capital,
+                    population: item.population,
+                    borders: item.borders,
+                    flag: item.flag
+                };
+                add(country);
+            });
+        }).catch(function (e) {
+            console.error(e);
+        }) 
     }
 
+    // Add loadDetails function to load the detailed data for a given country
+  function loadDetails(item) {
+    return fetch(apiURL).then(function (response) {
+        return response.json();
+    }).then(function () {
+        item.name,
+        item.capital,
+        item.population,
+        item.borders,
+        item.flag
+    }).catch(function (e) {
+        console.error (e);
+    })
+  }
+
+    /* function loadDetails() {
+    let url = item.detailsUrl;
+    return fetch(url)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(details) {
+        //Now we add the details to the items
+        item.imageUrl = details.sprites.other.dream_world.front_default;
+        item.height = details.height;
+        item.types = details.types;
+        item.weight = details.weight;
+      })
+      .catch(function(e) {
+        console.error(e);
+      });
+    } */
+    
+    function showDetails (country) {
+        loadDetails (country).then(function () {
+            showModal (country);
+        });
+    }
+ 
+    function showModal (country) {
+        let modalTitle = $('.modal-title');
+        let modalBody = $('.modal-body');
+
+        modalTitle.empty();
+        modalBody.empty();
+
+        let nameElement = $('<h1>' + country.name.common + '</h1>');
+
+        let capitalElement = $('<p>' + 'Capital: ' + country.capital + ' ' + '\'' + '</p>');
+
+        let populationElement = $('<p>' + 'Population: ' + country.population + ' ' + '</p>');
+
+        let bordersElement = $('<p>' + country.borders + '</p>');
+        
+        let flagElement = document.createElement('img');
+        imageElement.classList.add('country-img');
+        imageElement.src = country.flag;
+
+        modalTitle.append(nameElement);
+        modalBody.append(capitalElement);
+        modalBody.append(populationElement);
+        modalBody.append(bordersElement);
+        modalBody.append(flagElement);
+    } 
+
+    function find(countryName) {
+        let result = countryList.filter(country => country.name.common === countryName);
+        console.log (result[0]);
+    }
+
+    // The IIFE returns only an object with the same names for keys as values
     return {
         add: add,
         getAll: getAll,
         addListItem: addListItem,
-        showDetails: showDetails
+        loadList: loadList,
+        loadDetails, loadDetails,
+        showDetails: showDetails,
+        showModal: showModal,
+        find: find 
     };
 })();
 
-console.log(countryRepository.getAll())
+/* console.log(countryRepository.getAll()) */
 
-// for function
-/* for (let i=0; i < countryList.length; i++) {    
-    if (countryList[i].population >= 100000000) {
-        document.write (`<p>${countryList[i].name} (capital: ${countryList[i].capital}) ${"--Wow! This one is one of the ten most populated countries in the world!!!"} </p>`);
-    } else if (countryList[i].population < 72000) {
-        document.write (`<p>${countryList[i].name} (capital: ${countryList[i].capital}) ${'--This is a tiny country!!!'} </p>`);
-    } else {
-        document.write (`<p>${countryList[i].name} (capital: ${countryList[i].capital}) ${'--This is an average populated country'} </p>`);
-};}  */
-
-
-// forEach function
-/* document.write('===COUNTRIES OF THE WOLRD===');
-repository.forEach ( country => {
-    if (country.population >= 100000000) {
-    document.write (`<p>${country.name} (capital: ${country.capital}) ${"--Wow! This one is one of the ten most populated countries in the world!!!"} </p>`);
-    } else if (country.population < 72000) {
-        document.write (`<p>${country.name} (capital: ${country.capital}) ${'--This is a tiny country!!!'} </p>`);
-    } else {
-        document.write (`<p>${country.name} (capital: ${country.capital}) ${'--This is an average populated country'} </p>`);
-}}); */
-
-countryRepository.getAll().forEach(function(country) {
-    countryRepository.addListItem(country);
+countryRepository.loadList().then(function () {
+    countryRepository.getAll().forEach(function(country) {
+        countryRepository.addListItem(country);
+    });
 });
+
+
 
 
 
