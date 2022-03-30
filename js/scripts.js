@@ -115,16 +115,18 @@ let countryRepository = (function () {
         let populationElement = $('<p>' + 'Population: ' + country.population + ' ' + '</p>');
 
         let bordersElement = $('<p>' + country.borders + '</p>');
-        
-        let flagElement = document.createElement('img');
+       
+        let flagElement = $('<p>' + country.flag + '</p>');
+
+        /* let flagElement = document.createElement('img');
         imageElement.classList.add('country-img');
-        imageElement.src = country.flag;
+        imageElement.src = country.flag; */
 
         modalTitle.append(nameElement);
         modalBody.append(capitalElement);
         modalBody.append(populationElement);
         modalBody.append(bordersElement);
-        modalBody.append(flagElement);
+        modalBody.append(flagElement)
     } 
 
     function find(countryName) {
