@@ -3,9 +3,9 @@ let countryRepository = (function () {
     let countryList = [];
     let apiURL = 'https://restcountries.com/v3.1/all'
 
-    function add (country) {
+    function add(country) {
         if (
-            typeof country === 'object' && 
+            typeof country === 'object' &&
             'name' in country &&
             'capital' in country &&
             'population' in country &&
@@ -13,7 +13,7 @@ let countryRepository = (function () {
         ) {
             countryList.push(country);
         } else {
-        console.log('this does not belong to country');    
+            console.log('this does not belong to country');
         }
     }
 
@@ -30,14 +30,14 @@ let countryRepository = (function () {
         let button = document.createElement('button');
         button.innerText = country.name.common;
         button.classList.add('btn', 'btn-warning', 'btn-block');
-        
+
         //link buttons to modal container
-        button.setAttribute('data-target', '#modal-contrainer');
-        button.setAttribute('data-toggle', 'modal');    
+        button.setAttribute('data-target', '#modal-container');
+        button.setAttribute('data-toggle', 'modal');
 
         listCountry.appendChild(button);
         countryList.appendChild(listCountry);
-        button.addEventListener ('click', function () {
+        button.addEventListener('click', function () {
             showDetails(country);
         });
     }
@@ -59,23 +59,23 @@ let countryRepository = (function () {
             });
         }).catch(function (e) {
             console.error(e);
-        }) 
+        })
     }
 
     // Add loadDetails function to load the detailed data for a given country
-  function loadDetails(item) {
-    return fetch(apiURL).then(function (response) {
-        return response.json();
-    }).then(function () {
-        item.name,
-        item.capital,
-        item.population,
-        item.borders,
-        item.flag
-    }).catch(function (e) {
-        console.error (e);
-    })
-  }
+    function loadDetails(item) {
+        return fetch(apiURL).then(function (response) {
+            return response.json();
+        }).then(function () {
+            item.name,
+                item.capital,
+                item.population,
+                item.borders,
+                item.flag
+        }).catch(function (e) {
+            console.error(e);
+        })
+    }
 
     /* function loadDetails() {
     let url = item.detailsUrl;
@@ -94,14 +94,14 @@ let countryRepository = (function () {
         console.error(e);
       });
     } */
-    
-    function showDetails (country) {
-        loadDetails (country).then(function () {
-            showModal (country);
+
+    function showDetails(country) {
+        loadDetails(country).then(function () {
+            showModal(country);
         });
     }
- 
-    function showModal (country) {
+
+    function showModal(country) {
         let modalTitle = $('.modal-title');
         let modalBody = $('.modal-body');
 
@@ -115,7 +115,7 @@ let countryRepository = (function () {
         let populationElement = $('<p>' + 'Population: ' + country.population + ' ' + '</p>');
 
         let bordersElement = $('<p>' + country.borders + '</p>');
-       
+
         let flagElement = $('<p>' + country.flag + '</p>');
 
         /* let flagElement = document.createElement('img');
@@ -127,11 +127,11 @@ let countryRepository = (function () {
         modalBody.append(populationElement);
         modalBody.append(bordersElement);
         modalBody.append(flagElement)
-    } 
+    }
 
     function find(countryName) {
         let result = countryList.filter(country => country.name.common === countryName);
-        console.log (result[0]);
+        console.log(result[0]);
     }
 
     // The IIFE returns only an object with the same names for keys as values
@@ -143,14 +143,14 @@ let countryRepository = (function () {
         loadDetails, loadDetails,
         showDetails: showDetails,
         showModal: showModal,
-        find: find 
+        find: find
     };
 })();
 
 /* console.log(countryRepository.getAll()) */
 
 countryRepository.loadList().then(function () {
-    countryRepository.getAll().forEach(function(country) {
+    countryRepository.getAll().forEach(function (country) {
         countryRepository.addListItem(country);
     });
 });
@@ -159,4 +159,4 @@ countryRepository.loadList().then(function () {
 
 
 
- 
+
